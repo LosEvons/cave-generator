@@ -1,0 +1,3 @@
+Käytetyt tunnit: 1
+
+Olen tällä viikolla tutkinut mahdollisia aiheita, ja päätin ottaa tutumman aiheen jotta saan tehtävän turvallisesti loppuun tiukkojen aikataulujen takia. Aiheen tutkiminen ei ole juuri edistynyt määrittelydokumenttia pidemmälle, muuten kuin yksinkertaisen toimintasuunnitelman muodossa. Tällä viikolla en oppinut juuri mitään uutta vielä. Seuraavaksi otan vapaapäiviä pari kappaletta, ja alan sitten toteuttamaan visualisaatiota algoritmin kehitystä ja testaamista varten. 
