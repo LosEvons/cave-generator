@@ -4,7 +4,7 @@
 ### Toteutetut algoritimt ja tietorakenteet:
 https://vazgriz.com/119/procedurally-generated-dungeons/
 - Jokin huoneidenluontialgoritmi (esim. Binary Space Partition)
-- Delaunay Triangulation Graph
+- Delaunay Triangulation Graph Bowyer-Watson -algoritmilla.
 - Minimum Spanning Tree ylemmästä
 - A*
 ### Ratkaistava Ongelma

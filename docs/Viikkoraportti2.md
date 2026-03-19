@@ -1,0 +1,3 @@
+Käytetyt tunnit: 6
+
+Päätin käyttää triangulaatioon Bowyer-Watson algoritmia. Loin simpplein pohjan osittain aiemmista projekteistani yksinkeratiselle karttageneraatiolle. Yritin olla vähän liian ovela paikoittain, joten koodin luettavuus ei mitään parasta. Opin tällä viikolla muutamia kieliteknisiä seikkoja Pythonista, sekä perusasioita algoritmeistani. Seuraavaksi otan vapaapäivän tai kaksi, katsahdan testausta ja koodin laatua, ja lähden hahmottelemaan algoritmien rakennetta projektin kontekstissa.

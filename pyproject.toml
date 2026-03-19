@@ -11,6 +11,17 @@ dependencies = [
     "tcod (>=20.1.0,<21.0.0)"
 ]
 
+[project.scripts]
+cave-generator = "main:cli"
+
+[tool.poetry]
+packages = [
+    { include = "main.py" },
+    { include = "generate_rooms.py" },
+    { include = "matrix2d.py" },
+    { include = "utils.py" },
+]
+
 
 [build-system]
 requires = ["poetry-core>=2.0.0,<3.0.0"]
