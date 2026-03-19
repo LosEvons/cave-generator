@@ -51,7 +51,6 @@ class Rect:
 
 def carve_room(cells: list[CellType], w: int, room: Rect) -> None:
     xs, ys = room.inside
-    x1, x2 = xs.start, xs.stop
     for x, y in product(range(xs.start, xs.stop), range(ys.start, ys.stop)):
         cells[xy_to_i(x, y, w)] = CellType.FREE
 
