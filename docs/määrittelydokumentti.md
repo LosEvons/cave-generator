@@ -1,6 +1,7 @@
 # Määrittelydokumentti
+Tämä projekti on jatkoa aiemmasta työstäni kevään kurssilla, joka jäi kesken.
 ### Käytetty Ohjelmointikieli : Python
-### Muut Hallitut Ohjelmointikielet : C, C++, Haskell, Clojure, JavaScript/TypeScript
+### Muut Hallitut Ohjelmointikielet : C, C++, JavaScript/TypeScript
 ### Toteutetut algoritimt ja tietorakenteet:
 https://vazgriz.com/119/procedurally-generated-dungeons/
 - Jokin huoneidenluontialgoritmi (esim. Binary Space Partition)
@@ -8,7 +9,7 @@ https://vazgriz.com/119/procedurally-generated-dungeons/
 - Minimum Spanning Tree ylemmästä
 - A*
 ### Ratkaistava Ongelma
-- Kiinnostavien karttojen luominen peleihin on resursseja vievää ja hidasta työtä, joka ei skaalaudu helposti.
+- Kiinnostavien karttojen luominen peleihin on resursseja vievää ja hidasta työtä.
 ### Ohjelman syöte
 - Siemenluku satunnaislukugeneraattorille, jota käytetään huoneiden luomiseen.
 ### Tavoiteltava aikavaativuus: Noin O(n²)
