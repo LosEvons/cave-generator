@@ -9,63 +9,23 @@ Conditions to be tested against:
 """
 
 import pytest
-from sympy import Point, Segment, Triangle, Expr
-import itertools
-from collections.abc import Iterable
-import networkx as nx
+from sympy import Point
 
 from algorithm import bowyer_watson, mst
+from conftest import (
+    get_vertices,
+    get_edges,
+    total_weight,
+    is_spanning_tree,
+    brute_force_weight,
+    has_cut_property,
+)
 
 MOCK_POINTS = {
     "triangle": [(0, 0), (3, 0), (0, 4)],
     "cloud": [(0, 0), (4, 0), (4, 4), (0, 4), (2, 2)],
-    "grid": [(x, y) for x in range(3) for y in range(3)] # equal weights for all edges
+    "grid": [(x, y) for x in range(3) for y in range(3)]
 }
-
-def get_vertices(triangles: list[Triangle]) -> set[Point]:
-    return {v for t in triangles for v in t.vertices}
-
-def get_edges(triangles: list[Triangle]) -> set[frozenset[Point]]:
-    return {frozenset(e.points) for t in triangles for e in t.sides}
-
-def edge_length(edge: frozenset[Point]) -> Expr:
-    a, b = tuple(edge)
-    return Segment(a, b).length
-
-def total_weight(edges: Iterable[Segment]) -> Expr:
-    return sum(e.length for e in edges)
-
-def build_graph(edges: set[frozenset[Point]]) -> nx.Graph:
-    graph = nx.Graph()
-    for e in edges:
-        a, b = tuple(e)
-        graph.add_edge(a, b, weight=Segment(a, b).length)
-    return graph
-
-def is_spanning_tree(edges: set[frozenset[Point]], vertices: set[Point]) -> bool:
-    graph = build_graph(edges)
-    graph.add_nodes_from(vertices) # catch isolated vertices
-    return set(graph.nodes) == vertices and nx.is_tree(graph)
-
-def brute_force_weight(edges: set[frozenset[Point]], vertices: set[Point]) -> Expr:
-    n_edges = len(vertices) - 1
-    best = None
-    for combination in itertools.combinations(edges, n_edges):
-        if is_spanning_tree(set(combination), vertices):
-            weight = sum(edge_length(e) for e in combination)
-            if best is None or weight < best:
-                best = weight
-    return best
-
-def has_cut_property(mst_edges: set[frozenset[Point]], all_edges: set[frozenset[Point]]) -> bool:
-    graph = build_graph(mst_edges)
-    for e in all_edges - mst_edges:
-        a, b = tuple(e)
-        path = nx.shortest_path(graph, a, b)
-        path_edges = [frozenset((path[i], path[i + 1])) for i in range(len(path) - 1)]
-        if any(edge_length(path_edge) > edge_length(e) for path_edge in path_edges):
-            return False
-    return True
 
 def test_empty_input():
     assert mst([]) == []

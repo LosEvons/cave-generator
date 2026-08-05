@@ -1,5 +1,7 @@
 from sympy import Point, Triangle, N, Segment
 
+Edge = frozenset[Point]
+
 def bowyer_watson(points: list[tuple[int, int]]) -> list[Triangle]:
     if not points: # Check if input is empty
         return []
@@ -28,8 +30,8 @@ def bowyer_watson(points: list[tuple[int, int]]) -> list[Triangle]:
             if N(t.circumcircle.center.distance(point)) <= N(t.circumcircle.radius)
         }
     
-        e_counts: dict[frozenset, int] = {}
-        e_points: dict[frozenset, tuple[Point, Point]] = {}
+        e_counts: dict[Edge, int] = {}
+        e_points: dict[Edge, tuple[Point, Point]] = {}
         for triangle in bad_triangles:
             for edge in triangle.sides:
                 k = frozenset(edge.points)
@@ -70,12 +72,12 @@ def mst(triangles: list[Triangle]) -> list[Segment]:
         return r
 
     # Convert triangulation to an edge set
-    raw_edges: set[frozenset[Point]] = {
+    raw_edges: set[Edge] = {
         frozenset(side.points) for triangle in triangles for side in triangle.sides
     }
 
     # Sort edge set
-    sorted_edges: list[frozenset[Point]] = sorted(
+    sorted_edges: list[Edge] = sorted(
         raw_edges,
         key=lambda edge: tuple(edge)[0].distance(tuple(edge)[1])
     )
@@ -93,5 +95,5 @@ def mst(triangles: list[Triangle]) -> list[Segment]:
 
 
 #def astar(edge: Edge) -> list[Point]:
-    # find and return path for a single edge per call
     # TODO
+    # find and return path for a single edge per call

@@ -5,30 +5,19 @@ Conditions to be tested against:
 3. No duplicate triangles
 4. No empty triangles
 5. No overlapping triangles exist
-6. A set of points should produce a triangulation 
+6. A set of points should produce a triangulation
     such that no point is contained in the circumcircle of any triangle
 7. The super triangle is cleaned up after triangulation is done
 """
 import random
-from sympy import N, Point, Triangle, convex_hull
-import numpy as np
+
 import pytest
+from sympy import Point, convex_hull
 
 from algorithm import bowyer_watson
+from conftest import assert_is_delaunay
 
 TEST_POINTS = [(0, 0), (3, 0), (3, 3), (0, 3), (1, 2), (1, 1)]
-
-# helper to check delaunay property
-def assert_is_delaunay(points, triangles, tolerance=1e-9):
-    as_points = [Point(x, y) for x, y in points]
-    for triangle in triangles:
-        circumcircle = triangle.circumcircle
-        for point in as_points:
-            if point not in triangle.vertices:
-                d = N(circumcircle.center.distance(point))
-                r = N(circumcircle.radius)
-                
-                assert d >= r - tolerance, f"{point} is inside the circumcircle of {triangle.vertices}"
 
 def test_empty_input():
     assert bowyer_watson([]) == []
@@ -80,7 +69,7 @@ def test_delaunay_property_random(seed):
         }
     )
     if len(points) < 3:
-        pytest.skip("Generated less thatn 3 points")
+        pytest.skip("Generated less than 3 points")
     
     triangles = bowyer_watson(points)
     assert_is_delaunay(points, triangles)
