@@ -1,6 +1,9 @@
-from sympy import Point, Triangle, N
+from sympy import Point, Triangle, N, Segment
 
 def bowyer_watson(points: list[tuple[int, int]]) -> list[Triangle]:
+    if not points: # Check if input is empty
+        return []
+
     # Format input points into correct data form
     points = [Point(x, y) for x, y in points]
 
@@ -47,10 +50,47 @@ def bowyer_watson(points: list[tuple[int, int]]) -> list[Triangle]:
     ] # Remove super triangle and attached triangles
 
 
-#def msp(triangles: list[Triangle]) -> list[Edge]:
-    # triangles to weighted edges by distance
-    # figure out algo to use for this
-    # TODO
+def mst(triangles: list[Triangle]) -> list[Segment]:
+    if not triangles: # Check if input is empty
+        return []
+
+    # Union-find initial state and tracker
+    parent: dict[Point, Point] = {}
+
+    # Helper function to find sets and perform path compression.
+    # Follow links in parent until you find a vertex that points to itself.
+    # If roots are equal, the vertices are in the same set and linking them would create a cycle.
+    def find_set(v: Point) -> Point:
+        parent.setdefault(v, v) # initialize every vertex to be its own root by default lazily
+        r = v
+        while parent[r] != r: # find root
+            r = parent[r]
+        while parent[v] != r: # path compression
+            parent[v], v = r, parent[v]
+        return r
+
+    # Convert triangulation to an edge set
+    raw_edges: set[frozenset[Point]] = {
+        frozenset(side.points) for triangle in triangles for side in triangle.sides
+    }
+
+    # Sort edge set
+    sorted_edges: list[frozenset[Point]] = sorted(
+        raw_edges,
+        key=lambda edge: tuple(edge)[0].distance(tuple(edge)[1])
+    )
+
+    # Use Kruskal's algorithm to find the minimum spanning tree
+    result: list[Segment] = []
+    for edge in sorted_edges:
+        a, b = tuple(edge)
+        root_a, root_b = find_set(a), find_set(b)
+        if root_a != root_b: # are a and b in different sets.
+            result.append(Segment(a, b))
+            parent[root_a] = root_b
+
+    return result
+
 
 #def astar(edge: Edge) -> list[Point]:
     # find and return path for a single edge per call

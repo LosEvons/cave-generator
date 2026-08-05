@@ -30,6 +30,8 @@ def assert_is_delaunay(points, triangles, tolerance=1e-9):
                 
                 assert d >= r - tolerance, f"{point} is inside the circumcircle of {triangle.vertices}"
 
+def test_empty_input():
+    assert bowyer_watson([]) == []
 
 def test_three_points_produce_single_triangle():
     points = [(0, 0), (1, 0), (0, 1)]
