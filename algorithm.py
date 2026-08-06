@@ -1,7 +1,8 @@
 from sympy import Point, Triangle, N, Segment
-
+from utils import timeit
 Edge = frozenset[Point]
 
+@timeit
 def bowyer_watson(points: list[tuple[int, int]]) -> list[Triangle]:
     if not points: # Check if input is empty
         return []
@@ -51,7 +52,7 @@ def bowyer_watson(points: list[tuple[int, int]]) -> list[Triangle]:
         if not set(triangle.vertices) & set(super_triangle.vertices)
     ] # Remove super triangle and attached triangles
 
-
+@timeit
 def mst(triangles: list[Triangle]) -> list[Segment]:
     if not triangles: # Check if input is empty
         return []
@@ -93,7 +94,3 @@ def mst(triangles: list[Triangle]) -> list[Segment]:
 
     return result
 
-
-#def astar(edge: Edge) -> list[Point]:
-    # TODO
-    # find and return path for a single edge per call

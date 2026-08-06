@@ -3,6 +3,11 @@ from functools import reduce
 from itertools import product
 import random
 from typing import Tuple
+
+from sympy import Point, Segment
+
+from algorithm import bowyer_watson, mst
+from astar import astar
 from matrix2d import CellType, Matrix2D
 from utils import xy_to_i
 
@@ -50,10 +55,31 @@ class Rect:
         )      
 
 # Change tile type to free for all cells inside the given room rectangle
-def carve_room(cells: list[CellType], w: int, room: Rect) -> None:
+def carve_room(cells: list[CellType], w: int, room: Rect) -> list[CellType]:
+    result = list(cells)
     xs, ys = room.inside
     for x, y in product(range(xs.start, xs.stop), range(ys.start, ys.stop)):
-        cells[xy_to_i(x, y, w)] = CellType.FREE
+        result[xy_to_i(x, y, w)] = CellType.FREE
+    return result
+
+# Change tile type to free for all A* cells
+def carve_hallways(matrix: Matrix2D, rooms: list[Rect]) -> Matrix2D:
+    if len(rooms) < 2:
+        return matrix
+
+    points = [Point(room.center_x, room.center_y) for room in rooms]
+
+    if len(points) == 2: # only one possible solution, no triangulation needed
+        tree = [Segment(*points)]
+    else:
+        triangulation = bowyer_watson([(int(p.x), int(p.y)) for p in points])
+        tree = mst(triangulation)
+
+    path = astar(tree, matrix)
+    result = list(matrix.cells)
+    for cell in path:
+        result[xy_to_i(int(cell.x), int(cell.y), matrix.w)] = CellType.FREE
+    return Matrix2D(matrix.w, matrix.h, result)
 
 # Generate a random room rectangle within the given width and height constraints
 def generate_room(
@@ -85,16 +111,19 @@ def generate_rooms(
         if (room := generate_room(rng, w, h)) is not None
     ) # Generate room candidates
     
-    # Helper to ensure adherence to room count and no overlaps
-    def check_placement(candidate: Rect, rooms: list[Rect]) -> bool:
-        return all(not candidate.intersects(room) for room in rooms) and len(rooms) < room_count
-    
-    # Helper to attempt room placement, returning updated room list if successful
-    def try_place(rooms: list[Rect], candidate: Rect) -> list[Rect]:
-        if not check_placement(candidate, rooms):
+    # Helper to check if room placement is valid
+    def check_placement(rooms: list[Rect], candidate: Rect) -> list[Rect]:
+        if not all(not candidate.intersects(room) for room in rooms) and len(rooms) < room_count:
             return rooms
-        carve_room(cells, w, candidate)
         return [*rooms, candidate]
-    reduce(try_place, candidates, [])
-    
-    return Matrix2D(w, h, cells)
+
+    rooms = reduce(check_placement, candidates, [])
+    for room in rooms:
+        cells = carve_room(cells, w, room)
+
+    matrix = carve_hallways(
+        Matrix2D(w, h, cells),
+        rooms
+    )
+
+    return matrix
