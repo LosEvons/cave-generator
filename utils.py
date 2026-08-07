@@ -1,4 +1,5 @@
 import time
+import os
 
 # Converts an (x,y) coordinate to an int index in a one dimensional coordinate system.
 def xy_to_i(x: int, y: int, width: int) -> int:
@@ -10,6 +11,8 @@ def i_to_xy(i: int, width: int) -> tuple[int, int]:
 
 # A function timing decorator
 def timeit(method):
+    if os.environ.get("DEBUG") != 1:
+        return method
     def timed(*args, **kwargs):
         start = time.time()
         result = method(*args, **kwargs)

@@ -1,5 +1,6 @@
 import math
 from dataclasses import dataclass
+from typing import List
 
 
 @dataclass(frozen=True)
@@ -7,15 +8,28 @@ class Point:
     x: int
     y: int
 
+    def distance(self, other) -> float:
+        return math.hypot(other.x - self.x, other.y - self.y)
+
 
 @dataclass(frozen=True)
-class Edge:
+class Segment:
     start: Point
     end: Point
 
     @property
+    def points(self) -> tuple[Point, Point]:
+        return self.start, self.end
+
+    @property
     def length(self) -> float:
-        return math.hypot(self.start.x - self.end.x, self.start.y - self.end.y)
+        return self.start.distance(self.end)
+
+
+@dataclass(frozen=True)
+class Circle:
+    center: Point
+    radius: float
 
 
 @dataclass(frozen=True)
@@ -25,11 +39,15 @@ class Triangle:
     c: Point
 
     @property
-    def _edges(self) -> tuple[Edge, Edge, Edge]:
-        return Edge(self.a, self.b), Edge(self.b, self.c), Edge(self.c, self.a)
+    def sides(self) -> tuple[Segment, Segment, Segment]:
+        return Segment(self.a, self.b), Segment(self.b, self.c), Segment(self.c, self.a)
 
     @property
-    def circumcircle(self) -> tuple[Point, float]:
+    def vertices(self) -> tuple[Point, Point, Point]:
+        return self.a, self.b, self.c
+
+    @property
+    def circumcircle(self) -> Circle:
         ax, ay = self.a.x, self.a.y
         bx, by = self.b.x, self.b.y
         cx, cy = self.c.x, self.c.y
@@ -56,4 +74,17 @@ class Triangle:
 
         center = Point(ux, uy)
         r = math.hypot(ax - ux, ay - uy)
-        return center, r
+        return Circle(center, r)
+
+
+    @property
+    def area(self) -> float:
+        ax, ay = self.a.x, self.a.y
+        bx, by = self.b.x, self.b.y
+        cx, cy = self.c.x, self.c.y
+        return (
+                (ax * (by - cy)
+                 + bx * (cy - ay)
+                 + cx * (ay - by))
+                / 2
+        )

@@ -1,6 +1,6 @@
 from sympy import Point, Triangle, N, Segment
 from utils import timeit
-Edge = frozenset[Point]
+Edge = frozenset[Point] # For hashing and equality checking
 
 @timeit
 def bowyer_watson(points: list[tuple[int, int]]) -> list[Triangle]:
