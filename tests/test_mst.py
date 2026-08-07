@@ -9,7 +9,6 @@ Conditions to be tested against:
 """
 
 import pytest
-from sympy import Point
 
 from algorithm import bowyer_watson, mst
 from conftest import (

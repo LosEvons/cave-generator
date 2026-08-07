@@ -1,4 +1,4 @@
-from sympy import Point, Triangle, N, Segment
+from data_structures import Point, Segment, Triangle, Circle
 from utils import timeit
 Edge = frozenset[Point] # For hashing and equality checking
 
@@ -28,7 +28,7 @@ def bowyer_watson(points: list[tuple[int, int]]) -> list[Triangle]:
         # Check and collect bad triangles
         bad_triangles = {
             t for t in triangles
-            if N(t.circumcircle.center.distance(point)) <= N(t.circumcircle.radius)
+            if t.circumcircle.center.distance(point) <= t.circumcircle.radius
         }
     
         e_counts: dict[Edge, int] = {}

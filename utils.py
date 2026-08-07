@@ -11,7 +11,7 @@ def i_to_xy(i: int, width: int) -> tuple[int, int]:
 
 # A function timing decorator
 def timeit(method):
-    if os.environ.get("DEBUG") != 1:
+    if os.environ.get("DEBUG") != "1":
         return method
     def timed(*args, **kwargs):
         start = time.time()

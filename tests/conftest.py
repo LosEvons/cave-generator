@@ -2,7 +2,7 @@ import itertools
 from collections.abc import Iterable
 
 import networkx as nx
-from sympy import N, Point, Segment, Triangle
+from data_structures import Point, Segment, Triangle
 
 from algorithm import Edge
 
@@ -59,7 +59,7 @@ def assert_is_delaunay(points, triangles, tolerance=1e-9):
         circumcircle = triangle.circumcircle
         for point in as_points:
             if point not in triangle.vertices:
-                d = N(circumcircle.center.distance(point))
-                r = N(circumcircle.radius)
+                d = circumcircle.center.distance(point)
+                r = circumcircle.radius
 
                 assert d >= r - tolerance, f"{point} is inside the circumcircle of {triangle.vertices}"

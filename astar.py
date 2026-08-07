@@ -1,7 +1,7 @@
 import heapq
 from typing import Generator, Iterator
 
-from sympy import Point, Segment
+from data_structures import Point, Segment
 from matrix2d import CellType, Matrix2D
 from utils import xy_to_i, timeit
 

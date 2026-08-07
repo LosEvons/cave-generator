@@ -14,16 +14,16 @@ class Point:
 
 @dataclass(frozen=True)
 class Segment:
-    start: Point
-    end: Point
+    p1: Point
+    p2: Point
 
     @property
     def points(self) -> tuple[Point, Point]:
-        return self.start, self.end
+        return self.p1, self.p2
 
     @property
     def length(self) -> float:
-        return self.start.distance(self.end)
+        return self.p1.distance(self.p2)
 
 
 @dataclass(frozen=True)

@@ -12,7 +12,9 @@ Conditions to be tested against:
 import random
 
 import pytest
-from sympy import Point, convex_hull
+from sympy import convex_hull
+from sympy import Point as SympyPoint
+from data_structures import Point
 
 from algorithm import bowyer_watson
 from conftest import assert_is_delaunay
@@ -46,8 +48,8 @@ def test_no_empty_triangles():
 def test_no_overlapping_triangles():
     triangles = bowyer_watson(TEST_POINTS)
     total_area = sum(abs(triangle.area) for triangle in triangles)
-    ch_area = convex_hull(*[Point(x, y) for x, y in TEST_POINTS]).area
-    assert total_area == ch_area
+    ch_area = convex_hull(*[SympyPoint(x, y) for x, y in TEST_POINTS]).area # Using sympy's point representation as an exception to easily use the convex_hull function
+    assert total_area == pytest.approx(ch_area)
 
 def test_super_triangle_cleanup():
     triangles = bowyer_watson(TEST_POINTS)

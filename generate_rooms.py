@@ -4,7 +4,7 @@ from itertools import product
 import random
 from typing import Tuple
 
-from sympy import Point, Segment
+from data_structures import Point, Segment
 
 from algorithm import bowyer_watson, mst
 from astar import astar
