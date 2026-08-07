@@ -4,3 +4,7 @@ Toteutin testit ja algoritmin MST:n laskemiselle triangulaatiosta. Huomasin myö
 Toteutin A* haun kuitenkin, ja asetin FREE ja SOLID celleille eri arvot. Pientä refaktorointia generate_rooms.py tiedoston sisällä, yksi bugikorjaus reducen käytössä, ja huomasin että algoritmilla kestää aika kauan laskea, joten pitää selvittää missä vika.
 Opin että kannattaa testata funktion käyttämät ajat ajoissa.
 Tein sympy:n tilalle omat tietorakenteet ja vaihdoin ne käyttöön.
+
+Tällä viikolla opin miten toteuttaa yksinkertaisia geometrisia laskuja sekä uusia lähestymistapoja algoritmien toiminnan opettamiseen itselle. Myös pitkäjänteisyyttä ongelmia etsiessä, erityisesti kun ongelmaa varten pitää profiloida tarkemmin ulkopuolista koodia.
+
+Seuraavaksi selvitän miten testaan A* algoritmin, selvitän mitä muuta tulisi testata, sekä aloitan tarkemman dokumentaation kirjoittamisen.
