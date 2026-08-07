@@ -1,12 +1,11 @@
 import math
 from dataclasses import dataclass
-from typing import List
 
 
 @dataclass(frozen=True)
 class Point:
-    x: int
-    y: int
+    x: float
+    y: float
 
     def distance(self, other) -> float:
         return math.hypot(other.x - self.x, other.y - self.y)
