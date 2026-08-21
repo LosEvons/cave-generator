@@ -86,8 +86,8 @@ def generate_room(
     rng: random.Random,
     w: int, 
     h: int, 
-    min_size: int = 5, 
-    max_size: int = 10
+    min_size: int,
+    max_size: int
     ) -> Rect | None:
     rw = rng.randint(min_size, max_size)
     rh = rng.randint(min_size, max_size)
@@ -100,15 +100,33 @@ def generate_rooms(
     w: int, 
     h: int, 
     room_count: int = 10,
-    seed: int | None = None
+    seed: int | None = None,
+    min_size: int = 5,
+    max_size: int = 10
     ) -> Matrix2D:
+
+    if min_size > max_size:
+        raise ValueError("min_size must be less than or equal to max_size")
+
+    if min_size < 1:
+        raise ValueError("min_size must be greater than or equal to 1")
+
+    if w < max_size + 2 or h < max_size + 2:
+        raise ValueError("width and height must be greater than max_size + 2")
+
+    if room_count <= 0:
+        raise ValueError("room_count must be greater than 0")
+
+    if w <= 0 or h <= 0:
+        raise ValueError("width and height must be greater than 0")
+
     rng = random.Random(seed) # Set seed of rng generation
     cells = [CellType.SOLID] * (w * h) # Initialize all cells as solid
     iterations = room_count * 8 # Number of iterations to attempt room placement, allowing for retries in case of overlaps
     candidates = (
         room
         for _ in range(iterations)
-        if (room := generate_room(rng, w, h)) is not None
+        if (room := generate_room(rng, w, h, min_size, max_size)) is not None
     ) # Generate room candidates
     
     # Helper to check if room placement is valid
