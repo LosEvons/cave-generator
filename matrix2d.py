@@ -6,19 +6,16 @@ class CellType(Enum):
     """The three possible states of a cell in a Matrix2D: SOLID (wall), FREE (empty space of rooms), and HALLWAY (empty space of hallways, which has lower A* cost than FREE)"""
     SOLID = auto()
     FREE = auto()
-    HALLWAY = auto()
 
 # Map CellType to their corresponding character representations
 cell_chars = {
     CellType.SOLID: "#",
     CellType.FREE: " ",
-    CellType.HALLWAY: " ",
 }
 
 cell_costs = {
     CellType.SOLID: 3,  # High cost for walls
-    CellType.FREE: 1,      # Low cost for free space
-    CellType.HALLWAY: 0,   # No cost for existing hallways
+    CellType.FREE: 0,   # Zero cost for free space
 }
 
 @dataclass

@@ -97,5 +97,8 @@ def astar(triangulation: list[Segment], matrix: Matrix2D) -> list[Point]:
     """
     path: list[Point] = []
     for segment in triangulation:
-        path.extend(astar_step(segment.p1, segment.p2, matrix))
+        segment_path = astar_step(segment.p1, segment.p2, matrix)
+        if path and path[-1] == segment_path[0]:
+            segment_path = segment_path[1:] # deduplicate Points in the path
+        path.extend(segment_path)
     return path

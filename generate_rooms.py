@@ -103,7 +103,7 @@ def carve_hallways(matrix: Matrix2D, rooms: list[Rect]) -> Matrix2D:
     path = astar(tree, matrix)
     result = list(matrix.cells)
     for cell in path:
-        result[xy_to_i(int(cell.x), int(cell.y), matrix.w)] = CellType.HALLWAY
+        result[xy_to_i(int(cell.x), int(cell.y), matrix.w)] = CellType.FREE
     return Matrix2D(matrix.w, matrix.h, result)
 
 # Generate a random room rectangle within the given width and height constraints
