@@ -11,9 +11,9 @@ from astar import astar
 from matrix2d import CellType, Matrix2D
 from utils import xy_to_i
 
-# A representation of a 2D rectangle and its properties
 @dataclass
 class Rect:
+    """A representation of a 2D rectangle with integer position and size"""
     x: int
     y: int
     w: int
@@ -21,22 +21,27 @@ class Rect:
     
     @property
     def center_x(self) -> int:
+        """Return the x-coordinate of the center of the rectangle"""
         return self.x + self.w // 2
 
     @property
     def center_y(self) -> int:
+        """Return the y-coordinate of the center of the rectangle"""
         return self.y + self.h // 2
 
     @property
     def x2(self) -> int:
+        """Return the x-coordinate of the right edge of the rectangle"""
         return self.x + self.w
     
     @property
     def y2(self) -> int:
+        """Return the y-coordinate of the bottom edge of the rectangle"""
         return self.y + self.h
     
     @property
     def inside(self) -> Tuple[slice, slice]:
+        """Return slices representing the interior of the rectangle, excluding the edges"""
         return slice(
             self.x + 1, self.x2
         ), slice(
@@ -44,6 +49,7 @@ class Rect:
         )
 
     def intersects(self, other: "Rect", padding: int = 1) -> bool:
+        """Check if this rectangle intersects with another rectangle, with optional padding"""
         return not(
             self.x2 + padding <= other.x
             or
@@ -54,16 +60,35 @@ class Rect:
             self.y >= other.y2 + padding
         )      
 
-# Change tile type to free for all cells inside the given room rectangle
+
 def carve_room(cells: list[CellType], w: int, room: Rect) -> list[CellType]:
+    """Carve out a room in a given matrix by creating a new list of cells with the room area set to free
+
+    Args:
+        cells (list[CellType]): List of cells representing the matrix
+        w (int): The width of the matrix
+        room (Rect): The rectangle representing the room to carve out
+
+    Returns:
+        A new list of cells with the room area set to free
+    """
     result = list(cells)
     xs, ys = room.inside
     for x, y in product(range(xs.start, xs.stop), range(ys.start, ys.stop)):
         result[xy_to_i(x, y, w)] = CellType.FREE
     return result
 
-# Change tile type to free for all A* cells
+
 def carve_hallways(matrix: Matrix2D, rooms: list[Rect]) -> Matrix2D:
+    """Connect room centers with hallways using A* on an MST of a triangulation of room centers and carve them into the matrix
+
+    Args:
+        matrix (Matrix2D): The matrix to carve hallways into
+        rooms (list[Rect]): List of rectangles representing the rooms
+
+    Returns:
+        The updated matrix with hallways carved into it
+    """
     if len(rooms) < 2:
         return matrix
 
@@ -78,7 +103,7 @@ def carve_hallways(matrix: Matrix2D, rooms: list[Rect]) -> Matrix2D:
     path = astar(tree, matrix)
     result = list(matrix.cells)
     for cell in path:
-        result[xy_to_i(int(cell.x), int(cell.y), matrix.w)] = CellType.FREE
+        result[xy_to_i(int(cell.x), int(cell.y), matrix.w)] = CellType.HALLWAY
     return Matrix2D(matrix.w, matrix.h, result)
 
 # Generate a random room rectangle within the given width and height constraints
@@ -88,14 +113,25 @@ def generate_room(
     h: int, 
     min_size: int,
     max_size: int
-    ) -> Rect | None:
+    ) -> Rect:
+    """Generate a room of ranzom size and position within the given constraints
+
+    Args:
+        rng (random.Random): Random number generator instance
+        w (int): Width of the matrix
+        h (int): Height of the matrix
+        min_size (int): Minimum size of the room
+        max_size (int): Maximum size of the room
+    Returns:
+        A Rect object representing the room
+    """
     rw = rng.randint(min_size, max_size)
     rh = rng.randint(min_size, max_size)
     rx = rng.randint(1, w - rw - 1)
     ry = rng.randint(1, h - rh - 1)
     return Rect(rx, ry, rw, rh)
 
-# Generate a 2D matrix with randomly placed rooms, ensuring no overlaps and adhering to the specified room count
+
 def generate_rooms(
     w: int, 
     h: int, 
@@ -104,6 +140,20 @@ def generate_rooms(
     min_size: int = 5,
     max_size: int = 10
     ) -> Matrix2D:
+    """
+    Generate a 2D matrix with randomly placed rooms and hallways between them, ensuring no overlaps.
+
+    Args:
+        w (int): Width of the matrix.
+        h (int): Height of the matrix.
+        room_count (int): Number of rooms to generate. 10 by default.
+        seed (int | None): Seed for the random number generator. None by default.
+        min_size (int): Minimum size of the rooms. 5 by default.
+        max_size (int): Maximum size of the rooms. 10 by default.
+
+    Returns:
+        A Matrix2D representing the generated map.
+    """
 
     if min_size > max_size:
         raise ValueError("min_size must be less than or equal to max_size")

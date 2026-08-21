@@ -5,6 +5,7 @@ from matrix2d import print_matrix2d
 
 
 def main(w: int, h: int, room_count: int, seed: int | None):
+    """Generate dungeon with given parameters and print."""
     dungeon = generate_rooms(
         w=w,
         h=h,
@@ -16,6 +17,7 @@ def main(w: int, h: int, room_count: int, seed: int | None):
 
 
 def parse_args():
+    """Parse and return cli arguments"""
     parser = argparse.ArgumentParser()
     parser.add_argument("--width", "-W", type=int, default = 100, help="Map width")
     parser.add_argument("--height", "-H", type=int, default = 100, help="Map height")
@@ -25,6 +27,7 @@ def parse_args():
 
 
 def cli():
+    """Entry point to parse cli arguments and call main function"""
     args = parse_args()
     main(args.width,
          args.height,

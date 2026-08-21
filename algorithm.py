@@ -4,6 +4,15 @@ Edge = frozenset[Point] # For hashing and equality checking
 
 @timeit
 def bowyer_watson(points: list[tuple[int, int]]) -> list[Triangle]:
+    """
+    Computes the Delaunay triangulation of a set of 2D points using the Bowyer-Watson algorithm.
+
+    Args:
+        points: A list of 2D points as (x, y) tuples.
+
+    Returns:
+        A list of Triangle objects representing the Delaunay triangulation. Empty list if points is empty.
+    """
     if not points: # Check if input is empty
         return []
 
@@ -54,16 +63,25 @@ def bowyer_watson(points: list[tuple[int, int]]) -> list[Triangle]:
 
 @timeit
 def mst(triangles: list[Triangle]) -> list[Segment]:
+    """
+    Compute the minimum spanning tree (MST) of the edges of a set of triangles using Kruskal's algorithm.
+
+    Args:
+        triangles: A list of Triangle objects.
+    Returns:
+         The MST edges as Segments. Empty list if triangles is empty.
+    """
     if not triangles: # Check if input is empty
         return []
 
     # Union-find initial state and tracker
     parent: dict[Point, Point] = {}
 
-    # Helper function to find sets and perform path compression.
-    # Follow links in parent until you find a vertex that points to itself.
-    # If roots are equal, the vertices are in the same set and linking them would create a cycle.
+
     def find_set(v: Point) -> Point:
+        """
+        Union-find. Returns the root of v's set and performs path compression.
+        """
         parent.setdefault(v, v) # initialize every vertex to be its own root by default lazily
         r = v
         while parent[r] != r: # find root
