@@ -31,6 +31,7 @@ Data structures used defined in `data_tructures.py`, `generate_rooms.py` and `ma
 ### Use of Large Language Models
 I utilized Claude and Claude Code in sketching out program structure and requirements, as well as in debugging individual functions and calculations. No code or text was written with an LLM or copied straight from their response. I tried to keep my conversations with LLMs in the form of pseudocode when I needed clarification on something. Towards the end I also used Claude's code review capabilities to check for places to improve code quality.
 I also utilized Gemini and NotebookLLM in looking up information on the algorithms and to explain the underlying logic to me, if I did not understand it by reading the source material or pseudocode.
+During the writing of tests I used Claude to help me double check and work out test cases in instances where creating such cases was menial.
 
 ### Sources used:
 - https://en.wikipedia.org/wiki/Delaunay_triangulation

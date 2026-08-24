@@ -1,11 +1,10 @@
 # Testing Document
 
 ## Unit test coverage
-Coverage is currently at 65%, which is mostly caused by the project skeleton in generate_rooms.py not being tested currently. The test files and main.py are omitted from coverage results.
-Coverage is run every time tests are run.
+Coverage is currently at 98%. The test files, utils.py and main.py are omitted from coverage results.
 
 ## Testing strategy
-Tests are split into per algorithm into three files. Each algorithm is tested against its mathematical definition. The algorithms are also tested against bad inputs.
+Tests are split into per algorithm into four files. Each algorithm is tested against its mathematical definition. The algorithms are also tested against bad inputs.
 Here's a comprehensive breakdown of the conditions tested for each algorithm:
 - **Bowyer-Watson**
 1. Input of three points should produce a single triangle
@@ -30,8 +29,17 @@ Here's a comprehensive breakdown of the conditions tested for each algorithm:
 4. An out-of-bounds start or end raises error
 5. astar() combines paths of multiple segments in the correct order
 6. astar() will prefer existing hallways to carving new ones
+- **Generate rooms**
+1. Rect.intersects correctly handles overlapping and padding
+2. carve_room only carves tiles from the room interior
+3. generate_room always adheres to bounds and size constraints
+4. generate_rooms validates inputs and raises correctly
+5. generate_rooms is deterministic (same result for same seed)
+6. generate_rooms produces a fully connected map
 
 The tests use both fixed hand-picked inputs to check basic structural properties, such as when checking whether the output is consistent with the algorithm's definition, and randomly generated inputs with fixed seeds for general fuzz-style testing. For Bowyer-Watson the inputs come in the form of point sets, and for A* they come in the form of Matrix2D grids.
+Some tests utilize networkx to calculate things like connectedness and convex hull to check results against mathematical conditions, so I don't have to write that logic myself, but can focus on the core algorithm implementation.
+test_generate_rooms_produces_fully_connected_map is an example of e2e testing in this project.
 
 The tests can be reproduced with the following commands:
 

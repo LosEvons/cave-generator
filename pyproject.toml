@@ -46,4 +46,4 @@ pythonpath = ["."]
 addopts = "--cov=. --cov-report=term-missing"
 
 [tool.coverage.run]
-omit = ["main.py", "tests/*"]
+omit = ["main.py", "tests/*", "utils.py"]
