@@ -1,7 +1,6 @@
 import argparse
 
 from generate_rooms import generate_rooms
-from matrix2d import print_matrix2d
 
 
 def main(w: int, h: int, room_count: int, seed: int | None, min_size: int, max_size: int):
@@ -15,7 +14,7 @@ def main(w: int, h: int, room_count: int, seed: int | None, min_size: int, max_s
         max_size=max_size
         )
     print(f"width={w}, height={h}, room_count={room_count}, seed={seed}, min_size={min_size}, max_size={max_size}")
-    print_matrix2d(dungeon)
+    print(dungeon.as_string)
 
 
 def parse_args():

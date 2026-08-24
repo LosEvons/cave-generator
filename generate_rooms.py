@@ -9,7 +9,6 @@ from data_structures import Point, Segment
 from algorithm import bowyer_watson, mst
 from astar import astar
 from matrix2d import CellType, Matrix2D
-from utils import xy_to_i
 
 @dataclass
 class Rect:
@@ -61,21 +60,20 @@ class Rect:
         )      
 
 
-def carve_room(cells: list[CellType], w: int, room: Rect) -> list[CellType]:
+def carve_room(cells: list[list[CellType]], room: Rect) -> list[list[CellType]]:
     """Carve out a room in a given matrix by creating a new list of cells with the room area set to free
 
     Args:
         cells (list[CellType]): List of cells representing the matrix
-        w (int): The width of the matrix
         room (Rect): The rectangle representing the room to carve out
 
     Returns:
         A new list of cells with the room area set to free
     """
-    result = list(cells)
+    result = [row[:] for row in cells]
     xs, ys = room.inside
     for x, y in product(range(xs.start, xs.stop), range(ys.start, ys.stop)):
-        result[xy_to_i(x, y, w)] = CellType.FREE
+        result[y][x] = CellType.FREE
     return result
 
 
@@ -168,7 +166,7 @@ def generate_rooms(
         raise ValueError("width and height must be greater than 0")
 
     rng = random.Random(seed) # Set seed of rng generation
-    cells = [CellType.SOLID] * (w * h) # Initialize all cells as solid
+    cells = [[CellType.SOLID] * w for _ in range(h)] # Initialize all cells as solid
     iterations = room_count * 8 # Number of iterations to attempt room placement, allowing for retries in case of overlaps
     candidates = (
         room
@@ -186,7 +184,7 @@ def generate_rooms(
 
     rooms = reduce(check_placement, candidates, [])
     for room in rooms:
-        cells = carve_room(cells, w, room)
+        cells = carve_room(cells, room)
 
     matrix = carve_hallways(
         Matrix2D(w, h, cells),

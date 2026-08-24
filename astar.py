@@ -1,9 +1,9 @@
 import heapq
-from typing import Generator, Iterator
+from typing import Iterator
 
 from data_structures import Point, Segment
-from matrix2d import CellType, Matrix2D, cell_costs
-from utils import xy_to_i, timeit
+from matrix2d import Matrix2D
+from utils import timeit
 
 _DIRECTIONS = (
     (1, 0),
@@ -95,7 +95,7 @@ def astar(triangulation: list[Segment], matrix: Matrix2D) -> Matrix2D:
     Returns:
         The full path carved as a Matrix2D
     """
-    matrix_copy = Matrix2D(matrix.w, matrix.h, matrix.cells)
+    matrix_copy = matrix.copy()
     for segment in triangulation:
         segment_path = astar_step(segment.p1, segment.p2, matrix_copy)
         for point in segment_path:

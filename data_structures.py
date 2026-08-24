@@ -5,8 +5,8 @@ from dataclasses import dataclass
 @dataclass(frozen=True)
 class Point:
     """A 2D floating-point coordinate"""
-    x: float
-    y: float
+    x: int
+    y: int
 
     def distance(self, other) -> float:
         """Return the Euclidian distance between this point and another point"""

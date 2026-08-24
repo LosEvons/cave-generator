@@ -15,7 +15,7 @@ from data_structures import Point, Segment
 from matrix2d import CellType, Matrix2D
 
 def make_matrix(w, h, fill=CellType.FREE):
-    return Matrix2D(w=w, h=h, cells=[fill] * (w * h))
+    return Matrix2D(w=w, h=h, cells=[[fill] * w for _ in range(h)])
 
 def test_straight_free_grid():
     matrix = make_matrix(5, 1)
