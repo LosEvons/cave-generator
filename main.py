@@ -23,10 +23,10 @@ def parse_args():
     parser = argparse.ArgumentParser()
     parser.add_argument("--width", "-W", type=int, default = 100, help="Map width")
     parser.add_argument("--height", "-H", type=int, default = 100, help="Map height")
-    parser.add_argument("--room_count", "-R", type=int, default = 10, help="Room count")
+    parser.add_argument("--room_count", "-R", type=int, default = 30, help="Room count")
     parser.add_argument("--seed", "-s", type=int, default=None, help="Random seed (optional)")
     parser.add_argument("--min_size", "-m", type=int, default = 5, help="Minimum size of rooms (optional)")
-    parser.add_argument("--max_size", "-M", type=int, default = 10, help="Maximum size of rooms (optional)")
+    parser.add_argument("--max_size", "-M", type=int, default = 20, help="Maximum size of rooms (optional)")
     return parser.parse_args()
 
 

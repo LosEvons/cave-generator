@@ -20,8 +20,8 @@ def in_bounds(x: int, y: int, matrix: Matrix2D) -> bool:
 
 def cost_function(cell: Cell, matrix: Matrix2D) -> int:
     """Calculate the cost of moving to a cell"""
-    x, y = cell
-    return cell_costs.get(matrix.cells[xy_to_i(x, y, matrix.w)], 0) # there might be a bug here where it's not actually assigning 0 cost to already generated paths, since they've not been set to FREE yet
+    point: Point = Point(cell[0], cell[1])
+    return matrix.get_cell_cost(point)
 
 def heuristic(a: Cell, b: Cell) -> int:
     """Calculate Manhattan distance between two cells. Used as A* heuristic."""
@@ -86,19 +86,19 @@ def astar_step(start: Point, end: Point, matrix: Matrix2D) -> list[Point]:
 
 
 @timeit
-def astar(triangulation: list[Segment], matrix: Matrix2D) -> list[Point]:
-    """Run A* search for each segment in the mst of the triangulation and return the full path as a list of points.
+def astar(triangulation: list[Segment], matrix: Matrix2D) -> Matrix2D:
+    """Run A* search for each segment in the mst of the triangulation and return a Matrix2D map representation with the hallways carved out.
 
     Args:
         triangulation: Segments representing the minimum spanning tree of the triangulation
         matrix: 2D matrix representing the map
     Returns:
-        The full path as a list of points, including start and end points of each segment
+        The full path carved as a Matrix2D
     """
-    path: list[Point] = []
+    matrix_copy = Matrix2D(matrix.w, matrix.h, matrix.cells)
     for segment in triangulation:
-        segment_path = astar_step(segment.p1, segment.p2, matrix)
-        if path and path[-1] == segment_path[0]:
-            segment_path = segment_path[1:] # deduplicate Points in the path
-        path.extend(segment_path)
-    return path
+        segment_path = astar_step(segment.p1, segment.p2, matrix_copy)
+        for point in segment_path:
+            matrix_copy.carve_cell(point)
+
+    return matrix_copy

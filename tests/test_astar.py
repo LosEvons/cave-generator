@@ -32,7 +32,7 @@ def test_path_around_solid_preferred():
     # . # .
     # . . .
     for y in (0, 1):
-        matrix.cells[y * 3 + 1] = CellType.SOLID
+        matrix.set_cell(Point(1, y), CellType.SOLID)
     path = astar_step(Point(0, 0), Point(2, 0), matrix)
     assert Point(1, 2) in path
     assert Point(1, 0) not in path
@@ -58,6 +58,6 @@ def test_astar_combines_multiple_segments_in_order():
         Segment(Point(2, 0), Point(3, 0)),
         Segment(Point(3, 0), Point(4, 0))
     ]
-    path = astar(segments, matrix)
-    assert path == [Point(x, 0) for x in range(5)]
+    result = astar(segments, matrix)
+    assert all([result.get_cell(Point(x, 0)) == CellType.FREE for x in range(5)])
 

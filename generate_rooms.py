@@ -100,11 +100,8 @@ def carve_hallways(matrix: Matrix2D, rooms: list[Rect]) -> Matrix2D:
         triangulation = bowyer_watson([(int(p.x), int(p.y)) for p in points])
         tree = mst(triangulation)
 
-    path = astar(tree, matrix)
-    result = list(matrix.cells)
-    for cell in path:
-        result[xy_to_i(int(cell.x), int(cell.y), matrix.w)] = CellType.FREE
-    return Matrix2D(matrix.w, matrix.h, result)
+    return astar(tree, matrix)
+
 
 # Generate a random room rectangle within the given width and height constraints
 def generate_room(
@@ -181,7 +178,9 @@ def generate_rooms(
     
     # Helper to check if room placement is valid
     def check_placement(rooms: list[Rect], candidate: Rect) -> list[Rect]:
-        if not all(not candidate.intersects(room) for room in rooms) and len(rooms) < room_count:
+        if len(rooms) >= room_count:
+            return rooms
+        if any(candidate.intersects(room) for room in rooms):
             return rooms
         return [*rooms, candidate]
 
