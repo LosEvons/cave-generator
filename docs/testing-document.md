@@ -29,6 +29,7 @@ Here's a comprehensive breakdown of the conditions tested for each algorithm:
 3. A cheaper path around SOLID is preferred to crossing it
 4. An out-of-bounds start or end raises error
 5. astar() combines paths of multiple segments in the correct order
+6. astar() will prefer existing hallways to carving new ones
 
 The tests use both fixed hand-picked inputs to check basic structural properties, such as when checking whether the output is consistent with the algorithm's definition, and randomly generated inputs with fixed seeds for general fuzz-style testing. For Bowyer-Watson the inputs come in the form of point sets, and for A* they come in the form of Matrix2D grids.
 

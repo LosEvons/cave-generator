@@ -5,6 +5,7 @@ Conditions to be tested against:
 3. A cheaper path around SOLID is preferred to crossing it
 4. An out-of-bounds start or end raises error
 5. astar() combines paths of multiple segments in the correct order
+6. astar() will prefer existing hallways to carving new ones
 """
 
 import pytest
@@ -61,3 +62,21 @@ def test_astar_combines_multiple_segments_in_order():
     result = astar(segments, matrix)
     assert all([result.get_cell(Point(x, 0)) == CellType.FREE for x in range(5)])
 
+def test_astar_reuses_existing_corridor():
+    matrix = make_matrix(5, 3, fill=CellType.SOLID)
+    # E2 # # # #
+    # S1 # # # E1
+    # #  # # # S2
+    segments = [
+        Segment(Point(0, 1), Point(4, 1)),
+        Segment(Point(0, 0), Point(4, 2)),
+    ]
+
+    result = astar(segments, matrix)
+
+    cells = {
+        Point(x, y) for y in range(3) for x in range(5)
+        if result.get_cell(Point(x, y)) == CellType.FREE
+    }
+
+    assert len(cells) == 7
