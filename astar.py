@@ -21,7 +21,7 @@ def in_bounds(x: int, y: int, matrix: Matrix2D) -> bool:
 def cost_function(cell: Cell, matrix: Matrix2D) -> int:
     """Calculate the cost of moving to a cell"""
     x, y = cell
-    return cell_costs.get(matrix.cells[xy_to_i(x, y, matrix.w)], 0)
+    return cell_costs.get(matrix.cells[xy_to_i(x, y, matrix.w)], 0) # there might be a bug here where it's not actually assigning 0 cost to already generated paths, since they've not been set to FREE yet
 
 def heuristic(a: Cell, b: Cell) -> int:
     """Calculate Manhattan distance between two cells. Used as A* heuristic."""
