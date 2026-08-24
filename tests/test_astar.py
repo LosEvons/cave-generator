@@ -79,4 +79,4 @@ def test_astar_reuses_existing_corridor():
         if result.get_cell(Point(x, y)) == CellType.FREE
     }
 
-    assert len(cells) == 7
+    assert len(cells) == 7, (f"A* should always prefer using existing paths to creating new ones.")
