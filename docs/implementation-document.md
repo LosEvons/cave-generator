@@ -27,6 +27,8 @@ Data structures used defined in `data_tructures.py`, `generate_rooms.py` and `ma
 - The naming and structure of the program has a few artifacts and inconsistencies, which could be clarified
 - A* currently supports 4-directional movement, which could be expanded to 8 if desired.
 - The data structure use and passing is inconsistent, and could be improved massively. For example, the responsibility for who sets cell types and in what form isn't exactly clear and causes an issue in cost calculation in A\*.
+- The super triangle currently doesn't scale to infinity, so currently it just relies on the scope of the map being generated not scaling by too many magnitudes.
+- Test form could be standardized a bit more and to be more clean. Some of the older tests especially are now borderline redundant, and more complicated almost than the algorithm itself to read.
 
 ### Use of Large Language Models
 I utilized Claude and Claude Code in sketching out program structure and requirements, as well as in debugging individual functions and calculations. No code or text was written with an LLM or copied straight from their response. I tried to keep my conversations with LLMs in the form of pseudocode when I needed clarification on something. Towards the end I also used Claude's code review capabilities to check for places to improve code quality.

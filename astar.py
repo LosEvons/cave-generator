@@ -44,7 +44,7 @@ def get_path(origin: dict[Cell, Cell], current: Cell) -> list[Point]:
         path.append(current)
     return [Point(x, y) for x, y in reversed(path)]
 
-def astar_step(start: Point, end: Point, matrix: Matrix2D) -> list[Point]:
+def astar_step(start: Point, end: Point, matrix: Matrix2D) -> list[Point] | None:
     """Find the lowest-cost path between two points in a 2D matrix using A* search
 
     Args:
@@ -81,8 +81,9 @@ def astar_step(start: Point, end: Point, matrix: Matrix2D) -> list[Point]:
                 origin[neighbor] = current
                 g_score[neighbor] = neighbor_score
                 heapq.heappush(open_set, (neighbor_score + heuristic(neighbor, end_cell), neighbor))
+    return None
 
-    raise RuntimeError(f"No path from {start} to {end}")
+    # raise RuntimeError(f"No path from {start} to {end}") # This is dead code, and should never be reachable because there is no impassable tile in the implementation. If there is, this becomes important.
 
 
 @timeit

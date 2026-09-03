@@ -6,6 +6,7 @@ Conditions to be tested against:
 4. For any input, the edges of the MST are a subset of the edges of the triangulation
 5. Output is a valid spanning tree
 6. Output satisfies the cut property
+7. MST produced by mst() should match the weight of a peer library function
 """
 
 import pytest
@@ -16,8 +17,9 @@ from conftest import (
     get_edges,
     total_weight,
     is_spanning_tree,
-    brute_force_weight,
-    has_cut_property,
+    has_cycle_property,
+    random_points,
+    mst_weight_check
 )
 
 MOCK_POINTS = {
@@ -32,14 +34,25 @@ def test_empty_input():
 def test_single_triangle_weight():
     triangles = bowyer_watson(MOCK_POINTS["triangle"])
     tree = mst(triangles)
-    assert sorted(n.length for n in tree) == [3, 4]
+    assert sorted(n.length for n in tree) == pytest.approx([3.0, 4.0])
 
 def test_cloud_weight():
     triangles = bowyer_watson(MOCK_POINTS["cloud"])
     raw_edges = get_edges(triangles)
     vertices = get_vertices(triangles)
     tree = mst(triangles)
-    assert total_weight(tree) == brute_force_weight(raw_edges, vertices)
+    assert total_weight(tree) == pytest.approx(mst_weight_check(raw_edges))
+
+@pytest.mark.parametrize("seed", range(100))
+def test_mst_matches_networkx(seed):
+    points = random_points(seed)
+    if len(points) < 3:
+        pytest.skip("less than 3 points for mst matching, which is too few")
+    triangles = bowyer_watson(points)
+    tree = mst(triangles)
+    edges = {frozenset(e.points) for e in tree}
+    assert is_spanning_tree(edges, get_vertices(triangles))
+    assert total_weight(tree) == pytest.approx(mst_weight_check(get_edges(triangles)))
 
 @pytest.mark.parametrize("points", MOCK_POINTS.values(), ids=MOCK_POINTS.keys())
 def test_edges_are_subset_of_triangulation(points):
@@ -62,4 +75,4 @@ def test_mst_result_has_cut_property(points):
     edges = get_edges(triangles)
     tree = mst(triangles)
     mst_edges = {frozenset(e.points) for e in tree}
-    assert has_cut_property(mst_edges, edges)
+    assert has_cycle_property(mst_edges, edges)

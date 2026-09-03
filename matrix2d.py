@@ -15,9 +15,10 @@ cell_chars = {
     CellType.FREE: " ",
 }
 
+# Set A* traverse costs for cell types
 cell_costs = {
-    CellType.SOLID: 3,  # High cost for walls
-    CellType.FREE: 0,   # Zero cost for free space
+    CellType.SOLID: 10,  # High cost for walls
+    CellType.FREE: 1,   # Zero cost for free space
 }
 
 @dataclass

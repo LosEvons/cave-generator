@@ -23,7 +23,7 @@ def bowyer_watson(points: list[tuple[int, int]]) -> list[Triangle]:
     min_x, max_x = min(p.x for p in points), max(p.x for p in points)
     min_y, max_y = min(p.y for p in points), max(p.y for p in points)
     dx, dy = max_x - min_x, max_y - min_y
-    d = max(dx, dy, 1) * 10 # Just a very big number to ensure triangle encompasses all points
+    d = max(dx, dy, 1) * 1000 # Just a very big number to ensure triangle encompasses all points. Too small of a number leads to possible holes in the triangulation
     super_triangle = Triangle(
         Point(min_x - d, min_y - d),
         Point(min_x + 2 * d + dx, min_y - d),
@@ -37,7 +37,7 @@ def bowyer_watson(points: list[tuple[int, int]]) -> list[Triangle]:
         # Check and collect bad triangles
         bad_triangles = {
             t for t in triangles
-            if t.circumcircle.center.distance(point) <= t.circumcircle.radius
+            if t.circumcircle.center.distance(point) < t.circumcircle.radius
         }
     
         e_counts: dict[Edge, int] = {}
